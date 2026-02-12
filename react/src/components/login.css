@@ -1,0 +1,51 @@
+form {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffffff;
+  width: 90%
+}
+
+.custom-button {
+  width: 100%;
+  background-color: #1a411b;
+  color: white;
+  padding: 10px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.container {
+  padding: 20px;
+  
+}
+
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+  .Login form {
+    margin: 0 auto;
+    max-width: 600px;
+  }
+}
+
+.login-page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    
+    /* 显式强制内部文本左对齐，防止被父级 center 覆盖 */
+    text-align: left; 
+}
