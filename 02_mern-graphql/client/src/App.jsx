@@ -18,7 +18,7 @@ import Container from 'react-bootstrap/Container';
 import './App.css';
 //
 import StudentList from './components/StudentList';
-import AddStudent from './components/AddStudent';
+import SignUp from './components/SignUp';
 import EditStudent from './components/EditStudent';
 import DeleteStudent from './components/DeleteStudent';
 
@@ -38,7 +38,7 @@ function App() {
             <Nav className="mr-auto">
               <Nav.Link as={Link} to="/home" >Home</Nav.Link>
 
-              <Nav.Link as={Link} to="/addstudent">Add Student</Nav.Link>
+              <Nav.Link as={Link} to="/signup">Sign Up</Nav.Link>
               <Nav.Link as={Link} to="/studentlist">Student List</Nav.Link>
               <Nav.Link as={Link} to="/deletestudent">Delete Student</Nav.Link>
       
@@ -50,9 +50,10 @@ function App() {
       <div>
         <Routes>
           <Route index element={<Home />} />
-          <Route path = "home" element={<Home />} /> 
+          <Route path = "home" element={<Home />} />
+          <Route path = "signup" element={<SignUp />} />
+
           <Route path = "studentlist" element={<StudentList />} />
-          <Route path = "addstudent" element={<AddStudent />} />
           <Route path = "editstudent/:id" element={<EditStudent />} />
           <Route path = "deletestudent" element={<DeleteStudent />} />
 

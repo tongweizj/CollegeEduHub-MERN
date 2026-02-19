@@ -20,7 +20,7 @@ const env = process.env.NODE_ENV || 'development';
 
 const config = {
   development: {
-    db: process.env.MONGO_URI || 'mongodb://localhost:27017/crud-graphql-db-2024',
+    db: process.env.MONGO_URI || 'mongodb://localhost:27017/crud-graphql-db',
     sessionSecret: process.env.SESSION_SECRET || 'developmentSessionSecret',
   },
   production: {
