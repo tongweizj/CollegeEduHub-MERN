@@ -20,6 +20,7 @@ const startServer = async () => {
   });
 
   // Step 3: Start Apollo Server
+  // 包含了express 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
   });

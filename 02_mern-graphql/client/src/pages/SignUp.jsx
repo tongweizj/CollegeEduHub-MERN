@@ -50,7 +50,7 @@ const AddStudent = () => {
     let id, studentNumber, password, firstName, lastName, address, city, phoneNumber, email, program ;
     const [addStudent, { data, loading, error }] = useMutation(ADD_STUDENT);
 
-    if (loading) return 'Submitting...';studentNumber
+    if (loading) return 'Submitting...';
     if (error) return `Submission error! ${error.message}`;
 
     return (

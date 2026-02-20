@@ -91,8 +91,42 @@ const resolvers = {
         throw new Error('Failed to delete student');
       }
     },
-    
-  },
+
+    login: async (_, { studentNumber, password }) => {
+      // 1. 根据studentNumber查找用户
+      const user = await Student.findOne({ studentNumber });
+      if (!user) {
+        throw new GraphQLError('用户不存在', {
+          extensions: { code: 'BAD_USER_INPUT' },
+        });
+      }
+      console.log("user:", user.password)
+      console.log("password:", password)
+
+      // 2. 验证密码
+      // const isValidPassword = await bcrypt.compare(password, user.password);
+      // if (!isValidPassword) {
+      //   throw new GraphQLError('密码错误', {
+      //     extensions: { code: 'BAD_USER_INPUT' },
+      //   });
+      // }
+      if (password !== user.password) {
+        throw new GraphQLError('密码错误', {
+          extensions: { code: 'BAD_USER_INPUT' },
+        });
+      }
+      // 3. 生成 JWT
+      const JWT_SECRET = 'your_super_secret_key_123'; // 生产环境中请使用环境变量
+      const token = jwt.sign(
+        { id: user._id, studentNumber: user.studentNumber }, 
+        JWT_SECRET, 
+        { expiresIn: '24h' }
+      );
+      console.log("token:", token)
+      return { token, user };
+    }
+  } 
+  
 };
 
 module.exports = resolvers;

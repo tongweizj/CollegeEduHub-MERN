@@ -19,6 +19,7 @@ import './App.css';
 //
 
 import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 import EditStudent from './pages/EditStudent';
 import StudentList from './components/StudentList';
 
@@ -42,6 +43,7 @@ function App() {
               <Nav.Link as={Link} to="/home" >Home</Nav.Link>
 
               <Nav.Link as={Link} to="/signup">Sign Up</Nav.Link>
+              <Nav.Link as={Link} to="/login">Login</Nav.Link>
               <Nav.Link as={Link} to="/studentlist">Student List</Nav.Link>
               <Nav.Link as={Link} to="/deletestudent">Delete Student</Nav.Link>
       
@@ -55,6 +57,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path = "home" element={<Home />} />
           <Route path = "signup" element={<SignUp />} />
+          <Route path = "login" element={<Login />} />
+          
 
           <Route path = "studentlist" element={<StudentList />} />
           <Route path = "editstudent/:id" element={<EditStudent />} />

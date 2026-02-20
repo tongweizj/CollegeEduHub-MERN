@@ -17,7 +17,12 @@ const typeDefs = `#graphql
     program: String!
     enrolledCourse: [Course]
   }
-
+  
+  type AuthData {
+    token: String!
+    user: Student!
+  }
+  
   type Course {
       id: ID!
       courseCode: String!
@@ -47,7 +52,10 @@ const typeDefs = `#graphql
       email: String!,
       program: String!
     ): Student
-    
+
+    # 登录
+    login(studentNumber: String!, password: String!): AuthData
+
     updateStudent(
       id: ID!
       studentNumber: String!
