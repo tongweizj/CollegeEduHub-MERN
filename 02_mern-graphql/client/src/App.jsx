@@ -17,9 +17,12 @@ import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import './App.css';
 //
+
+import SignUp from './pages/SignUp';
+import EditStudent from './pages/EditStudent';
 import StudentList from './components/StudentList';
-import SignUp from './components/SignUp';
-import EditStudent from './components/EditStudent';
+
+
 import DeleteStudent from './components/DeleteStudent';
 
 import Home from './components/Home';

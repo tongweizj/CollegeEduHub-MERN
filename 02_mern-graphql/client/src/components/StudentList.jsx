@@ -18,12 +18,15 @@ const GET_STUDENTS = gql`
 {
     students{
         id
-      firstName
-      lastName
-      email
-      college
-      program
-      startingYear
+        studentNumber
+        password
+        firstName
+        lastName
+        address
+        email
+        city
+        phoneNumber
+        program
     }
 }
 `;
@@ -60,26 +63,31 @@ const StudentList = () => {
                 <tbody>
                     <tr>
                         <th>ID</th>
+                        <th>studentNumber</th>
                         <th>firstName</th>
                         <th>lastName</th>
+                        <th>address</th>
+                        <th>city</th>
+                        <th>phoneNumber</th>
                         <th>email</th>
-                        <th>college</th>
                         <th>program</th>
-                        <th>startingYear</th>
                         <th>OP</th>
                     </tr>
                     {data.students.map((student, index) => (
                         <tr key={index}>
                             <td>{student.id}</td>
+                            <td>{student.studentNumber}</td>
                             <td>{student.firstName}</td>
                             <td>{student.lastName}</td>
+                            <td>{student.address}</td>
+                            <td>{student.city}</td>
+                            <td>{student.phoneNumber}</td>
                             <td>{student.email}</td>
-                            <td>{student.college}</td>
                             <td>{student.program}</td>
-                            <td>{student.startingYear}</td>
+
                             <td>
                                 <Link to={`/editstudent/${student.id}`}>Edit</Link>
-                           <span>  </span>
+                                <span>  </span>
                                 <Button
                                     variant="danger"
                                     onClick={() => handleDelete(student.id)}
@@ -100,4 +108,3 @@ const StudentList = () => {
 }
 
 export default StudentList
-

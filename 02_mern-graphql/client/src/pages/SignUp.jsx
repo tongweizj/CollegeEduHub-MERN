@@ -13,23 +13,27 @@ import "./entryform.css"
 const ADD_STUDENT = gql`
     mutation AddStudent(
         # define input variables
+        $studentNumber: String!,
+        $password: String!,
         $firstName: String!,
         $lastName: String!,
+        $address: String!,
+        $city: String!,
+        $phoneNumber: String!,
         $email: String!,
-        $college: String!,
-        $program: String!,
-        $startingYear: Int!        
-        
+        $program: String!       
         ) {
         addStudent(        
             # provide values for the variables
+            studentNumber: $studentNumber,
+            password:$password,
             firstName: $firstName,
             lastName: $lastName,
+            address: $address,
+            city: $city,
+            phoneNumber: $phoneNumber,
             email: $email,
-            college: $college,
-            program: $program,
-            startingYear: $startingYear
-            
+            program: $program
             ) 
             # This is what the query will return when it is called
             {
@@ -43,10 +47,10 @@ const AddStudent = () => {
     //
     let navigate = useNavigate()
     //
-    let id, firstName, lastName, email, college, program, startingYear ;
+    let id, studentNumber, password, firstName, lastName, address, city, phoneNumber, email, program ;
     const [addStudent, { data, loading, error }] = useMutation(ADD_STUDENT);
 
-    if (loading) return 'Submitting...';
+    if (loading) return 'Submitting...';studentNumber
     if (error) return `Submission error! ${error.message}`;
 
     return (
@@ -54,34 +58,68 @@ const AddStudent = () => {
             <form
                 onSubmit={ e => {    
                     e.preventDefault();
-                    addStudent( { variables: {firstName: firstName.value, lastName: lastName.value, 
-                    email: email.value, college: college.value, program: program.value,
-                    startingYear: parseInt(startingYear.value) } 
+                    addStudent( { variables: {
+                        studentNumber:studentNumber.value, 
+                        password: password.value, 
+                        firstName: firstName.value, 
+                        lastName: lastName.value,
+                        address: address.value,
+                        city: city.value,
+                        phoneNumber: phoneNumber.value, 
+                        email: email.value,
+                        program: program.value
+                    } 
                     });
                     //
-                   
+                    studentNumber.value = '';
+                    password.value = ''; 
                     firstName.value = '';
                     lastName.value='';
+                    address.value = '';
+                    city.value = '';
+                    phoneNumber.value = '';
                     email.value='';
-                    college.value='';
                     program.value='';
-                    startingYear.value='';
                     navigate('/studentlist')                    } 
                 }
             >
                     
-
+                    <Form.Group>
+                        <Form.Label> student Number:</Form.Label>
+                        <Form.Control type="text"  name="studentNumber" ref={node => {studentNumber = node; }} 
+                            placeholder="Student Number:" />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label> password:</Form.Label>
+                        <Form.Control type="text"  name="password" ref={node => {password = node; }} 
+                            placeholder="password:" />
+                    </Form.Group>
                     <Form.Group>
                         <Form.Label> First Name:</Form.Label>
                         <Form.Control type="text"  name="firstName" ref={node => {firstName = node; }} 
                             placeholder="First Name:" />
                     </Form.Group>                   
-                    
-
                     <Form.Group>
                         <Form.Label> Last Name:</Form.Label>
                         <Form.Control type="text" name="lastName" ref={node => {lastName = node; }} 
                             placeholder="Last Name:" />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label> address:</Form.Label>
+                        <Form.Control type="text" name="address" ref={node => {address = node; }} 
+                            placeholder="address:" />
+                    </Form.Group> 
+
+                    <Form.Group>
+                        <Form.Label> city:</Form.Label>
+                        <Form.Control type="text"  name="city" ref={node => {city = node; }} 
+                            placeholder="city:" />
+                    </Form.Group>  
+
+                    <Form.Group>
+                        <Form.Label> phoneNumber:</Form.Label>
+                        <Form.Control type="text"  name="phoneNumber" ref={node => {phoneNumber = node; }} 
+                            placeholder="Phone Number:" />
                     </Form.Group> 
 
                     <Form.Group>
@@ -91,11 +129,7 @@ const AddStudent = () => {
                     </Form.Group>                     
                 
 
-                    <Form.Group>
-                        <Form.Label> College:</Form.Label>
-                        <Form.Control type="text"  name="college" ref={node => {college = node; }} 
-                            placeholder="College:" />
-                    </Form.Group>  
+                   
                 
                     <Form.Group>
                         <Form.Label> Program:</Form.Label>
@@ -103,11 +137,7 @@ const AddStudent = () => {
                             placeholder="Program:" />
                     </Form.Group>                    
                 
-                    <Form.Group>
-                        <Form.Label> Starting Year:</Form.Label>
-                        <Form.Control type="text"  name="startingYear" ref={node => {startingYear = node; }} 
-                            placeholder="Starting Year:" />
-                    </Form.Group>                     
+                                        
 
                     <Button variant="primary" type="submit"> Add Student </Button>
 

@@ -1,6 +1,7 @@
 // resolvers.js Code for the resolvers of the GraphQL server
 const Student = require('../models/Student');
-
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const resolvers = {
   Query: {
     students: async () => {

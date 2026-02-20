@@ -15,29 +15,53 @@ import Button from 'react-bootstrap/Button';
 const GET_STUDENT = gql`
   query GetStudent($id: ID!) {
     student(id: $id) {
-      id
-      firstName
-      lastName
-      email
-      college
-      program
-      startingYear
+       id
+        studentNumber
+        password
+        firstName
+        lastName
+        address
+        email
+        city
+        phoneNumber
+        program
     }
   }
 `;
 
 const UPDATE_STUDENT = gql`
-  mutation UpdateStudent($id: ID!, $firstName: String!, $lastName: String!, 
-    $email: String!, $college: String!, $program: String!, $startingYear: Int!) {
-    updateStudent(id: $id, firstName: $firstName, lastName: $lastName, 
-        email: $email, college: $college, program: $program, startingYear: $startingYear) {
+  mutation UpdateStudent(
+    $id: ID!, 
+    $studentNumber: String!,
+    $password: String!,
+    $firstName: String!, 
+    $lastName: String!,
+    $address: String!,
+    $city: String!,
+    $phoneNumber: String!, 
+    $email: String!, 
+    $program: String!) {
+    updateStudent(
+      id: $id, 
+      studentNumber: $studentNumber,
+      password:$password,
+      firstName: $firstName, 
+      lastName: $lastName,
+      address: $address,
+      city: $city,
+      phoneNumber: $phoneNumber, 
+      email: $email, 
+      program: $program) {
       id
+      studentNumber
+      password
       firstName
       lastName
+      address
       email
-      college
+      phoneNumber
+      city
       program
-      startingYear
     }
   }
 `;
@@ -61,12 +85,15 @@ const EditStudent = () => {
 
   // State for student data
   const [student, setStudent] = useState({
+    studentNumber:'',
+    password:'',
     firstName: '',
     lastName: '',
+    address:'',
+    city:'',
+    phoneNumber:'',
     email: '',
-    college: '',
-    program: '',
-    startingYear: 0,
+    program: ''
   });
 
   if (loading) return <p>Loading...</p>;
@@ -76,7 +103,7 @@ const EditStudent = () => {
     const { name, value } = event.target;
     setStudent((prevState) => ({
       ...prevState,
-      [name]: name === 'startingYear' ? parseInt(value, 10) : value,
+      [name]: value,
     }));
   };
 
@@ -98,6 +125,26 @@ const EditStudent = () => {
     <div>
       <h1>Edit Student</h1>
       <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formStudentNumber">
+          <Form.Label>Student Number</Form.Label>
+          <Form.Control
+            type="text"
+            name="studentNumber"
+            placeholder="Enter Student Number"
+            value={student.studentNumber}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="text"
+            name="password"
+            placeholder="Enter password"
+            value={student.password}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
         <Form.Group controlId="formFirstName">
           <Form.Label>First Name</Form.Label>
           <Form.Control
@@ -119,6 +166,38 @@ const EditStudent = () => {
             onChange={handleInputChange}
           />
         </Form.Group>
+        <Form.Group controlId="formAddress">
+          <Form.Label>College</Form.Label>
+          <Form.Control
+            type="text"
+            name="address"
+            placeholder="Enter address"
+            value={student.address}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formCity">
+          <Form.Label>city</Form.Label>
+          <Form.Control
+            type="text"
+            name="city"
+            placeholder="Enter city"
+            value={student.city}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formPhoneNumber">
+          <Form.Label>phoneNumber</Form.Label>
+          <Form.Control
+            type="text"
+            name="phoneNumber"
+            placeholder="Enter phone Number"
+            value={student.phoneNumber}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
 
         <Form.Group controlId="formEmail">
           <Form.Label>Email</Form.Label>
@@ -131,16 +210,7 @@ const EditStudent = () => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formCollege">
-          <Form.Label>College</Form.Label>
-          <Form.Control
-            type="text"
-            name="college"
-            placeholder="Enter college"
-            value={student.college}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
+        
 
         <Form.Group controlId="formProgram">
           <Form.Label>Program</Form.Label>
@@ -152,20 +222,8 @@ const EditStudent = () => {
             onChange={handleInputChange}
           />
         </Form.Group>
-
-        <Form.Group controlId="formStartingYear">
-          <Form.Label>Starting Year</Form.Label>
-          <Form.Control
-            type="number"
-            name="startingYear"
-            placeholder="Enter starting year"
-            value={student.startingYear}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-
         <Button variant="primary" type="submit">
-          Submit
+          Update
         </Button>
       </Form>
     </div>

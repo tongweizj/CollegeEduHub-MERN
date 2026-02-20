@@ -7,6 +7,7 @@ const typeDefs = `#graphql
   type Student {
     id: ID!
     studentNumber: String!
+    password: String!
     firstName: String!
     lastName: String!
     address: String!
@@ -37,6 +38,7 @@ const typeDefs = `#graphql
   type Mutation {
     addStudent(
       studentNumber: String!,
+      password: String!,
       firstName: String!,
       lastName: String!,
       address: String!
@@ -48,6 +50,8 @@ const typeDefs = `#graphql
     
     updateStudent(
       id: ID!
+      studentNumber: String!
+      password: String!
       firstName: String!
       lastName: String!
       address: String!
