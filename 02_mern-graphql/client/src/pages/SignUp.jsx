@@ -1,149 +1,106 @@
-// AddStudent component to add a student
 import React from 'react';
-import { gql, useMutation } from '@apollo/client';
-import Spinner from 'react-bootstrap/Spinner';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-//
 import { useNavigate } from 'react-router-dom';
+import { Form, Button, Container, Row, Col, Card, Spinner, Alert } from 'react-bootstrap';
+import { useAddStudent } from '../hooks/useStudentActions';
 
-import "./entryform.css"
-//
-//
-const ADD_STUDENT = gql`
-    mutation AddStudent(
-        # define input variables
-        $studentNumber: String!,
-        $password: String!,
-        $firstName: String!,
-        $lastName: String!,
-        $address: String!,
-        $city: String!,
-        $phoneNumber: String!,
-        $email: String!,
-        $program: String!       
-        ) {
-        addStudent(        
-            # provide values for the variables
-            studentNumber: $studentNumber,
-            password:$password,
-            firstName: $firstName,
-            lastName: $lastName,
-            address: $address,
-            city: $city,
-            phoneNumber: $phoneNumber,
-            email: $email,
-            program: $program
-            ) 
-            # This is what the query will return when it is called
-            {
-                id
-
-            }
-    }
-`;
-//function component to add a student
 const AddStudent = () => {
-    //
-    let navigate = useNavigate()
-    //
-    let id, studentNumber, password, firstName, lastName, address, city, phoneNumber, email, program ;
-    const [addStudent, { data, loading, error }] = useMutation(ADD_STUDENT);
+  const navigate = useNavigate();
+  const { student, handleInputChange, handleSubmit, loading, error } = useAddStudent(navigate);
 
-    if (loading) return 'Submitting...';
-    if (error) return `Submission error! ${error.message}`;
+  return (
+    <Container className="mt-5" style={{ maxWidth: '700px' }}>
+      <Card className="shadow-sm">
+        <Card.Body className="p-4">
+          <h2 className="mb-4 text-center">Register New Student</h2>
+          
+          {error && <Alert variant="danger" className="py-2 small">Error: {error.message}</Alert>}
 
-    return (
-        <div className = 'entryform'>
-            <form
-                onSubmit={ e => {    
-                    e.preventDefault();
-                    addStudent( { variables: {
-                        studentNumber:studentNumber.value, 
-                        password: password.value, 
-                        firstName: firstName.value, 
-                        lastName: lastName.value,
-                        address: address.value,
-                        city: city.value,
-                        phoneNumber: phoneNumber.value, 
-                        email: email.value,
-                        program: program.value
-                    } 
-                    });
-                    //
-                    studentNumber.value = '';
-                    password.value = ''; 
-                    firstName.value = '';
-                    lastName.value='';
-                    address.value = '';
-                    city.value = '';
-                    phoneNumber.value = '';
-                    email.value='';
-                    program.value='';
-                    navigate('/studentlist')                    } 
-                }
-            >
-                    
-                    <Form.Group>
-                        <Form.Label> student Number:</Form.Label>
-                        <Form.Control type="text"  name="studentNumber" ref={node => {studentNumber = node; }} 
-                            placeholder="Student Number:" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label> password:</Form.Label>
-                        <Form.Control type="text"  name="password" ref={node => {password = node; }} 
-                            placeholder="password:" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label> First Name:</Form.Label>
-                        <Form.Control type="text"  name="firstName" ref={node => {firstName = node; }} 
-                            placeholder="First Name:" />
-                    </Form.Group>                   
-                    <Form.Group>
-                        <Form.Label> Last Name:</Form.Label>
-                        <Form.Control type="text" name="lastName" ref={node => {lastName = node; }} 
-                            placeholder="Last Name:" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label> address:</Form.Label>
-                        <Form.Control type="text" name="address" ref={node => {address = node; }} 
-                            placeholder="address:" />
-                    </Form.Group> 
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="small fw-bold">Student Number</Form.Label>
+                  <Form.Control 
+                    name="studentNumber" 
+                    type="text" 
+                    value={student.studentNumber} 
+                    onChange={handleInputChange} 
+                    required 
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="small fw-bold">Password</Form.Label>
+                  <Form.Control 
+                    name="password" 
+                    type="password" 
+                    value={student.password} 
+                    onChange={handleInputChange} 
+                    required 
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
 
-                    <Form.Group>
-                        <Form.Label> city:</Form.Label>
-                        <Form.Control type="text"  name="city" ref={node => {city = node; }} 
-                            placeholder="city:" />
-                    </Form.Group>  
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="small fw-bold">First Name</Form.Label>
+                  <Form.Control name="firstName" type="text" value={student.firstName} onChange={handleInputChange} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="small fw-bold">Last Name</Form.Label>
+                  <Form.Control name="lastName" type="text" value={student.lastName} onChange={handleInputChange} />
+                </Form.Group>
+              </Col>
+            </Row>
 
-                    <Form.Group>
-                        <Form.Label> phoneNumber:</Form.Label>
-                        <Form.Control type="text"  name="phoneNumber" ref={node => {phoneNumber = node; }} 
-                            placeholder="Phone Number:" />
-                    </Form.Group> 
+            <Form.Group className="mb-3">
+              <Form.Label className="small fw-bold">Email Address</Form.Label>
+              <Form.Control name="email" type="email" value={student.email} onChange={handleInputChange} required />
+            </Form.Group>
 
-                    <Form.Group>
-                        <Form.Label> Email:</Form.Label>
-                        <Form.Control type="text"  name="email" ref={node => {email = node; }} 
-                            placeholder="Email:" />
-                    </Form.Group>                     
-                
+            <Form.Group className="mb-3">
+              <Form.Label className="small fw-bold">Street Address</Form.Label>
+              <Form.Control name="address" type="text" value={student.address} onChange={handleInputChange} />
+            </Form.Group>
 
-                   
-                
-                    <Form.Group>
-                        <Form.Label> Program:</Form.Label>
-                        <Form.Control type="text"  name="program" ref={node => {program = node; }} 
-                            placeholder="Program:" />
-                    </Form.Group>                    
-                
-                                        
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="small fw-bold">City</Form.Label>
+                  <Form.Control name="city" type="text" value={student.city} onChange={handleInputChange} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="small fw-bold">Phone Number</Form.Label>
+                  <Form.Control name="phoneNumber" type="text" value={student.phoneNumber} onChange={handleInputChange} />
+                </Form.Group>
+              </Col>
+            </Row>
 
-                    <Button variant="primary" type="submit"> Add Student </Button>
+            <Form.Group className="mb-4">
+              <Form.Label className="small fw-bold">Academic Program</Form.Label>
+              <Form.Control name="program" type="text" value={student.program} onChange={handleInputChange} />
+            </Form.Group>
 
-            </form>
-        </div>
-    );
-}
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+              <Button variant="secondary" onClick={() => navigate('/login')} className="me-md-2">
+                Already registered? Login
+              </Button>
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading ? <Spinner animation="border" size="sm" /> : 'Create Account'}
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
+  );
+};
 
-export default AddStudent
+export default AddStudent;

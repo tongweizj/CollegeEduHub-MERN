@@ -1,35 +1,38 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION } from '../graphql/studentQueries';
 
-export function useAuth() {
-  const [authname, setAuthname] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+export const useAuth = (navigate) => {
+  const [loginMutation, { loading, error }] = useMutation(LOGIN_MUTATION);
 
-  useEffect(() => {
-    // 关键：因为使用 Cookie，必须设置 withCredentials
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get('/api/welcome', {
-          withCredentials: true // 允许跨域发送 Cookie
-        });
+  const performLogin = async (studentNumber, password) => {
+    try {
+      const response = await loginMutation({
+        variables: { studentNumber, password }
+      });
 
-        // 如果成功，返回的是 payload.username
-        setAuthname(response.data);
-        setLoading(false);
-      } catch (error) {
-        // 如果后端返回 401 (token 不存在或失效)
+      if (response.data?.login) {
+        const { token, user } = response.data.login;
         
-          console.log("未授权或登录过期，跳转登录页");
-          setAuthname(null);
-      }finally {
-        setLoading(false);
+        // 💾 持久化存储
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        console.log('Login successful:', user);
+        navigate('/home'); // 登录成功后跳转到首页
+        return { success: true };
       }
-    };
+    } catch (err) {
+      console.error('Login failed:', err.message);
+      return { success: false, message: err.message };
+    }
+  };
 
-    checkAuth();
-  }, [navigate]);
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
-  return { authname, loading };
-}
+  return { performLogin, logout, loading, error };
+};
