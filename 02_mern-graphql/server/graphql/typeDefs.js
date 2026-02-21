@@ -81,6 +81,16 @@ const typeDefs = `#graphql
       section: String!,
       semester: String!
     ): Course
+
+    updateCourse(
+      id: ID!,
+      courseCode: String!,
+      courseName: String!,
+      section: String!,
+      semester: String!
+    ):Course
+
+    deleteCourse(id: ID!): Course
   }
 `;
 
