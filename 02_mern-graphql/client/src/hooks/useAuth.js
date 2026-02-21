@@ -13,11 +13,11 @@ export const useAuth = (navigate) => {
 
       if (response.data?.login) {
         const { token, user } = response.data.login;
-        
+
         // 💾 持久化存储
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-        
+
         console.log('Login successful:', user);
         navigate('/home'); // 登录成功后跳转到首页
         return { success: true };
@@ -27,12 +27,20 @@ export const useAuth = (navigate) => {
       return { success: false, message: err.message };
     }
   };
+  // 检查是否登录的辅助函数
+  const isAuthenticated = () => {
+    return !!localStorage.getItem('token');
+  };
 
+  const getCurrentUser = () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  };
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/login');
   };
 
-  return { performLogin, logout, loading, error };
+  return { performLogin, logout, loading, error, isAuthenticated, getCurrentUser };
 };

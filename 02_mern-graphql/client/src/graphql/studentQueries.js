@@ -111,6 +111,8 @@ export const LOGIN_MUTATION = gql`
       user {
         id
         studentNumber
+        lastName
+        firstName
       }
     }
   }
