@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Card, Spinner, Alert } from 'react-bootstrap';
-import { useDeleteStudentByEmail } from '../hooks/useStudentActions';
-import StudentCard from '../components/StudentCard';
-import FormInput from '../components/FormInput';
+import { useDeleteStudentByEmail } from '../../hooks/useStudentActions';
+import StudentCard from '../../components/StudentCard';
+import FormInput from '../../components/FormInput';
 
 const DeleteStudent = () => {
   const navigate = useNavigate();

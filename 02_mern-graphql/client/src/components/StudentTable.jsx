@@ -1,12 +1,13 @@
 import React from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 const StudentTable = ({ students, onDelete }) => {
+  const navigate = useNavigate();
   if (!students || students.length === 0) {
     return <p className="text-center text-muted mt-4">No students found.</p>;
   }
-
+  const showActions = onDelete != null;
   return (
     <Table hover responsive className="shadow-sm border">
       <thead className="table-light">
@@ -15,7 +16,7 @@ const StudentTable = ({ students, onDelete }) => {
           <th>Full Name</th>
           <th>Email</th>
           <th>Program</th>
-          <th className="text-center">Actions</th>
+          {showActions && <th className="text-center">Actions</th>}
         </tr>
       </thead>
       <tbody>
@@ -27,24 +28,36 @@ const StudentTable = ({ students, onDelete }) => {
             <td>
               <span className="badge bg-info text-dark">{student.program}</span>
             </td>
-            <td className="text-center">
-              <Button 
-                as={Link} 
-                to={`/editstudent/${student.id}`} 
-                variant="outline-primary" 
-                size="sm" 
-                className="me-2"
-              >
-                Edit
-              </Button>
-              <Button
-                variant="outline-danger"
-                size="sm"
-                onClick={() => onDelete(student.id)}
-              >
-                Delete
-              </Button>
-            </td>
+            {showActions && (
+              <td className="text-center">
+                <Button
+                  as={Link}
+                  to={`/student/${student.id}`}
+                  variant="outline-primary"
+                  size="sm"
+                  className="me-2"
+                >
+                  view
+                </Button>
+
+                <Button
+                  as={Link}
+                  to={`/editstudent/${student.id}`}
+                  variant="outline-primary"
+                  size="sm"
+                  className="me-2"
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={() => onDelete(student.id)}
+                >
+                  Delete
+                </Button>
+              </td>
+            )}
           </tr>
         ))}
       </tbody>

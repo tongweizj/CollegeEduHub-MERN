@@ -29,6 +29,7 @@ const typeDefs = `#graphql
       courseName: String!
       section: String!
       semester: String!
+      students: [Student]
   }
 
   # 3. 定义查询入口 (Query)
@@ -73,7 +74,7 @@ const typeDefs = `#graphql
     
     deleteStudentByEmail(email: String!): Student
 
-    enrollStudentInCourse(studentId: ID!, courseId: ID!): Student
+    enrollStudentInCourses(studentId: ID!, courseIds: [ID!]!): Student
 
     addCourse(
       courseCode: String!,

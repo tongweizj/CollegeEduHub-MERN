@@ -16,7 +16,6 @@ const FormInput = ({ label, name, type = "text", value, onChange, placeholder, r
     </Form.Group>
   );
 
-  // 如果传了 md 属性，则包装在 Col 中，否则直接返回
   return md ? <Col md={md}>{inputElement}</Col> : inputElement;
 };
 

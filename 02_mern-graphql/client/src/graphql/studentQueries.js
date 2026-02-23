@@ -28,6 +28,13 @@ export const GET_STUDENT = gql`
        city
        phoneNumber
        program
+      enrolledCourse {
+      id
+      courseName
+      courseCode
+      section
+      semester
+    }
     }
   }
 `;
@@ -55,6 +62,19 @@ query Students {
   }
 }
 `;
+export const Get_StudentAndCourses = gql`
+query GetStudentAndCourses($id: String!) {
+  student(id: $id) {
+    studentNumber
+    firstName
+    # 这里会自动触发 Student.enrolledCourse 的 resolver 去查数据库
+    enrolledCourse { 
+      courseCode
+      courseName
+    }
+  }
+}
+  `;
 export const UPDATE_STUDENT = gql`
   mutation UpdateStudent(
     $id: ID!, 
@@ -84,7 +104,20 @@ export const UPDATE_STUDENT = gql`
     }
   }
 `;
-
+export const  UPDATE_EnrollStudentInCourse = gql`
+mutation EnrollStudentInCourse($studentId: ID!, $courseId: ID!) {
+  enrollStudentInCourse(studentId: $studentId, courseId: $courseId) {
+  id
+    firstName
+    # 选课成功后，直接连带查出他现在拥有的所有课程详情！
+    enrolledCourse {
+      id
+      courseName
+      courseCode
+    }  
+  }
+}
+  `;
 export const DELETE_STUDENT_EMAIL = gql`
 mutation DeleteStudentByEmail($email: String!) {
   deleteStudentByEmail(email: $email) {
@@ -116,4 +149,17 @@ export const LOGIN_MUTATION = gql`
       }
     }
   }
+`;
+
+export const ENROLL_STUDENT_IN_COURSES = gql`
+mutation EnrollStudentInCourses($studentId: ID!, $courseIds: [ID!]!) {
+  enrollStudentInCourses(studentId: $studentId, courseIds: $courseIds) {
+    id
+    firstName
+    enrolledCourse {
+      id
+      courseName
+    }
+  }
+}
 `;

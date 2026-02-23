@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
-import { useEditStudent } from '../hooks/useStudentActions';
-import FormInput from '../components/FormInput';
-import StudentCard from '../components/StudentCard';
+import { useEditStudent } from '../../hooks/useStudentActions';
+import FormInput from '../../components/FormInput';
+import StudentCard from '../../components/StudentCard';
 
 
 const EditStudent = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { student, loading, error, handleInputChange, handleSubmit } = useEditStudent(id, navigate);
-  
+  console.log("student:", student)
 
   if (loading) return (
     <div className="text-center mt-5"><Spinner animation="border" /></div>

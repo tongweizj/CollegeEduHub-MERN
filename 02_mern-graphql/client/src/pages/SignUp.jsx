@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Card, Spinner, Alert } from 'react-bootstrap';
 import { useAddStudent } from '../hooks/useStudentActions';
+import FormInput from '../components/FormInput';
 
 const AddStudent = () => {
   const navigate = useNavigate();

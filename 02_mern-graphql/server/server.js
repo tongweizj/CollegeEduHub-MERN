@@ -6,7 +6,7 @@ const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 const configureMongoose = require('./config/mongoose');
 const typeDefs = require('./graphql/typeDefs');
-const studentResolvers = require('./graphql/resolvers');
+const studentResolvers = require('./graphql/studentResolvers');
 const courseResolvers = require('./graphql/courseResolvers');
 // Initialize the application
 const startServer = async () => {

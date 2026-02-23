@@ -20,7 +20,7 @@ const DeleteStudentById = () => {
       <Card className="shadow-sm border-danger">
         <Card.Body className="p-4">
           <h2 className="mb-4 text-center text-danger">Delete by ID</h2>
-          
+
           {error && <Alert variant="danger">Error: {error.message}</Alert>}
 
           <Form onSubmit={handleSubmit}>
@@ -39,15 +39,15 @@ const DeleteStudentById = () => {
             </Form.Group>
 
             <div className="d-grid gap-2">
-              <Button 
-                variant="danger" 
-                type="submit" 
+              <Button
+                variant="danger"
+                type="submit"
                 disabled={loading || !studentId}
               >
                 {loading ? <Spinner size="sm" animation="border" /> : 'Confirm Delete'}
               </Button>
-              <Button 
-                variant="outline-secondary" 
+              <Button
+                variant="outline-secondary"
                 onClick={() => navigate('/studentlist')}
               >
                 Cancel

@@ -1,6 +1,6 @@
-const Course = require('../models/Course');
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const Course = require('../models/course');
+const Student = require('../models/Student');
+
 const courseResolvers = {
      Query: {
         courses: async () => {
@@ -75,7 +75,15 @@ const courseResolvers = {
             throw new Error('Failed to delete course');
           }
         },
+    },
+    Course: {
+    students: async (parent) => {
+      // 这里的 parent 就是当前这门课程的数据
+      // 我们去 Student 集合里查：哪些学生的 enrolledCourse 数组里，包含了这门课的 parent._id？
+      
+      return await Student.find({ enrolledCourse: parent._id });
     }
+  }
     };
 
 module.exports = courseResolvers;
