@@ -3,12 +3,19 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 //
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
-//
-const client = new ApolloClient({
+
+const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
-  cache: new InMemoryCache()
+  credentials: 'include' // 🔑 这一行是开启 Cookie 存储的关键钥匙
+});
+
+const client = new ApolloClient({
+  link,
+  cache: new InMemoryCache(),
+  
 });
 //
 ReactDOM.createRoot(document.getElementById('root')).render(

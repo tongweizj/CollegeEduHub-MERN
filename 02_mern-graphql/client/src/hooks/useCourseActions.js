@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { ADD_COURSE, GET_COURSE, EDIT_COURSE, GET_COURSES, DELETE_COURSE } from '../graphql/courseQueries';
-
+import FormInput from '../../components/FormInput';
 /**
  * Hook to fetch a single course's details.
  * 获取单个课程详情的 Hook。
@@ -95,7 +95,7 @@ export const useAddCourse = (navigate) => {
     e.preventDefault();
     try {
       await addMutation({ variables: { ...course } });
-      navigate('/course'); // Redirect to course list / 跳转至课程列表
+      navigate('/courses'); // Redirect to course list / 跳转至课程列表
     } catch (err) {
       console.error('Add course failed:', err.message);
     }

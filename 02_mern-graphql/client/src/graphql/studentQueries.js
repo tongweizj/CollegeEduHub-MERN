@@ -150,7 +150,11 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
-
+export const LOGOUT_MUTATION = gql`
+  mutation LogOut {
+    logOut
+  }
+`;
 export const ENROLL_STUDENT_IN_COURSES = gql`
 mutation EnrollStudentInCourses($studentId: ID!, $courseIds: [ID!]!) {
   enrollStudentInCourses(studentId: $studentId, courseIds: $courseIds) {

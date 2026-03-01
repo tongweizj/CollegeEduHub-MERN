@@ -32,6 +32,7 @@ const resolvers = {
         throw new Error('Failed to fetch student');
       }
     },
+    isLoggedIn: (_, __, { req }) => !!req.user,
   },
   Mutation: {
     addStudent: async (_, args) => {
@@ -93,39 +94,40 @@ const resolvers = {
       }
     },
     // 👉 新增给学生选课的逻辑
-   enrollStudentInCourses: async (_, { studentId, courseIds }) => {
-  try {
-    // 1. 依然检查 ID 是否合法
-    const validCourses = await Course.find({ _id: { $in: courseIds } });
-    if (validCourses.length !== courseIds.length) {
-      throw new Error('选课失败：部分课程ID不存在');
-    }
+    enrollStudentInCourses: async (_, { studentId, courseIds }) => {
+      try {
+        // 1. 依然检查 ID 是否合法
+        const validCourses = await Course.find({ _id: { $in: courseIds } });
+        if (validCourses.length !== courseIds.length) {
+          throw new Error('选课失败：部分课程ID不存在');
+        }
 
-    // 2. 核心修正：使用 $set 覆盖原有的数组
-    const updatedStudent = await Student.findByIdAndUpdate(
-      studentId,
-      { 
-        $set: { enrolledCourse: courseIds } // 👉 $set 会用新的列表替换旧的列表
-      },
-      { new: true } 
-    );
+        // 2. 核心修正：使用 $set 覆盖原有的数组
+        const updatedStudent = await Student.findByIdAndUpdate(
+          studentId,
+          {
+            $set: { enrolledCourse: courseIds } // 👉 $set 会用新的列表替换旧的列表
+          },
+          { new: true }
+        );
 
-    if (!updatedStudent) {
-      throw new Error(`找不到 ID 为 ${studentId} 的学生`);
-    }
+        if (!updatedStudent) {
+          throw new Error(`找不到 ID 为 ${studentId} 的学生`);
+        }
 
-    return {
-      id: updatedStudent._id.toString(),
-      ...updatedStudent.toObject()
-    };
+        return {
+          id: updatedStudent._id.toString(),
+          ...updatedStudent.toObject()
+        };
 
-  } catch (error) {
-    console.error('更新选课失败:', error);
-    throw new Error(error.message);
-  }
-},
+      } catch (error) {
+        console.error('更新选课失败:', error);
+        throw new Error(error.message);
+      }
+    },
 
-    login: async (_, { studentNumber, password }) => {
+    login: async (_, { studentNumber, password }, { res }) => {
+      console.log("studentNumber, password:", studentNumber, password)
       // 1. 根据studentNumber查找用户
       const user = await Student.findOne({ studentNumber });
       if (!user) {
@@ -133,43 +135,44 @@ const resolvers = {
           extensions: { code: 'BAD_USER_INPUT' },
         });
       }
-      console.log("user:", user.password)
-      console.log("password:", password)
-
-      // 2. 验证密码
-      // const isValidPassword = await bcrypt.compare(password, user.password);
-      // if (!isValidPassword) {
-      //   throw new GraphQLError('密码错误', {
-      //     extensions: { code: 'BAD_USER_INPUT' },
-      //   });
-      // }
-      if (password !== user.password) {
+      if (!(await bcrypt.compare(password, user.password))) {
         throw new GraphQLError('密码错误', {
           extensions: { code: 'BAD_USER_INPUT' },
         });
       }
+
       // 3. 生成 JWT
       const JWT_SECRET = 'your_super_secret_key_123'; // 生产环境中请使用环境变量
       const token = jwt.sign(
-        { id: user._id, studentNumber: user.studentNumber }, 
-        JWT_SECRET, 
+        { id: user._id, studentNumber: user.studentNumber },
+        JWT_SECRET,
         { expiresIn: '24h' }
       );
       console.log("token:", token)
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: false,   // 开发环境用 http，必须设为 false
+        sameSite: 'lax', // 必须设为 'lax' 或 'none'，推荐 'lax'
+        maxAge: 24 * 60 * 60 * 1000 // 显式设置过期时间（1天）
+      });
       return { token, user };
+    },
+    logOut: (_, __, { res }) => {
+      res.clearCookie('token');
+      return 'Logged out successfully!';
     }
-  }, 
+  },
   Student: {
     enrolledCourse: async (parent) => {
       // 这里的 parent 就是上面 Query.student 查出来的那条学生数据
       // 假设 parent.enrolledCourse 里存的是选课的 ID 数组
       // 我们去 Course 集合里，找出 _id 在这个数组里的所有课程
-      
+
       // 如果你的数据库里没存数据，或者数组是空的，直接返回空数组
       if (!parent.enrolledCourse || parent.enrolledCourse.length === 0) {
         return [];
       }
-      
+
       return await Course.find({ _id: { $in: parent.enrolledCourse } });
     }
   }

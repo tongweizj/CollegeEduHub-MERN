@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { LOGIN_MUTATION } from '../graphql/studentQueries';
+import { LOGIN_MUTATION,LOGOUT_MUTATION } from '../graphql/studentQueries';
 
 /**
  * Custom hook for student authentication and session management.
@@ -10,7 +10,7 @@ export const useAuth = (navigate) => {
   // Apollo useMutation hook for executing the login operation
   // 用于执行登录操作的 Apollo useMutation 钩子
   const [loginMutation, { loading, error }] = useMutation(LOGIN_MUTATION);
-
+  const [logoutMutation] = useMutation(LOGOUT_MUTATION);
   /**
    * Executes the login process, stores credentials, and redirects the user.
    * 执行登录流程，存储凭证并重定向用户。
@@ -67,11 +67,26 @@ export const useAuth = (navigate) => {
    * Clears session data and redirects the user to the login page.
    * 清除会话数据并将用户重定向至登录页面。
    */
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
+  const logout =async () => {
+    try {
+      // 1. 通知后端清除 Cookie
+      await logoutMutation();
+      
+      // 2. 清除前端存储的用户信息
+      localStorage.removeItem('user');
+      
+      // 3. 重定向到登录页
+      navigate('/login');
+      
+      console.log('Logged out successfully and cookie cleared.');
+    } catch (err) {
+      console.error('Logout failed:', err.message);
+      // 即便后端失败，前端通常也要清理掉本地状态
+      localStorage.removeItem('user');
+      navigate('/login');
+    }
   };
+
 
   return { performLogin, logout, loading, error, isAuthenticated, getCurrentUser };
 };

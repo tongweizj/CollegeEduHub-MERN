@@ -38,6 +38,7 @@ const typeDefs = `#graphql
     student(id: ID!): Student
     courses: [Course]
     course(id: ID!): Course
+    isLoggedIn: Boolean!
   }
 
   # 4. 定义变更入口 (Mutation)
@@ -56,6 +57,7 @@ const typeDefs = `#graphql
 
     # 登录
     login(studentNumber: String!, password: String!): AuthData
+    logOut:String
 
     updateStudent(
       id: ID!

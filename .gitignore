@@ -138,3 +138,4 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 02_mern-graphql/client/package-lock.json
+02_mern-graphql/server/package-lock.json

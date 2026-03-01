@@ -1,17 +1,20 @@
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useAuth } from '../hooks/useAuth';
 const AppNavbar = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  // const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const { logout, isAuthenticated, getCurrentUser } = useAuth(navigate);
+  const loggedIn = isAuthenticated();
+  const user = getCurrentUser() || {};
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
+  const handleLogout = async () => {
+    await logout(); // 调用后端清除 Cookie
+   
+
   };
-
   return (
     <Navbar bg="primary" variant="dark" expand="lg" className="px-5 shadow-sm">
       <Container>
